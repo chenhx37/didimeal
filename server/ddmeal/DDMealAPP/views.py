@@ -13,7 +13,8 @@ from django.core import serializers
 import json
 import datetime
 import time
-
+import httplib,urllib,urllib2,cookielib
+import re
 
 # -------------------------------------------注册函数开始 ----------------------------
 # 没有使用模板的注册
@@ -153,7 +154,8 @@ def release(req):
         
         Order.objects.create(postTime=postTime, modifiedTime=postTime, endTime = endTime, \
             diningRoom = diningRoom, mealPrice = mealPrice, description=description,\
-            price=price,status=0, postBy=user)
+            price=price,status=0, postBy=user).save()
+
         error = False
         errorMs = "create order success!"
     else:
@@ -422,3 +424,84 @@ def orderSetting(decodejson):
             dj['fields'].setdefault("diningRoomName", None)
 
     return decodejson
+
+def verify(req):
+    netID = req.POST.get('netID', '')
+    password =  req.POST.get('password', '')
+    if netID == '' or password == '':
+        error = True
+        errorMs = "please post your netID and password"
+        return HttpResponse(json.dumps({"error":error, "errorMs":errorMs}),content_type="application/json")
+    cookie=cookielib.CookieJar()
+    handler=urllib2.HTTPCookieProcessor(cookie)
+    opener=urllib2.build_opener(handler)
+    res=opener.open("https://sso.sysu.edu.cn/cas/login")
+    #print cookie._cookies.values()
+    ckstr=""
+    # for ck in cookie:
+    #     ckstr += ck.name+"="+ck.value+";"
+    # print ckstr
+    data=res.read()
+    #print data
+    datas = data.split()
+    ltvaluestr = ""
+    exvaluestr = ""
+    _evaluestr = ""
+    for i in range(len(datas)):
+        if datas[i] == 'name="lt"':
+            # print datas[i+1]
+            ltvaluestr = datas[i+1]
+        if datas[i] == 'name="execution"':
+            # print datas[i+1]
+            exvaluestr = datas[i+1]
+        if datas[i] == 'name="_eventId"':
+            # print datas[i+1]
+            _evaluestr = datas[i+1]
+
+    ltval = ltvaluestr[ltvaluestr.find('=')+2:-1]
+    exval = exvaluestr[exvaluestr.find('=')+2:-1]
+    _eval = _evaluestr[_evaluestr.find('=')+2:-1]
+    #print ltvaluestr
+    #print "ltval", ltval, "exval", exval, "_eval", _eval
+
+
+    params=urllib.urlencode({'username':netID,'password': password,'lt':ltval,'execution':exval,'_eventId':_eval,'code':'','submit':''})
+
+    headers={"Cookie":ckstr,"Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8","Accept-Language":"zh-CN,zh;q=0.8,en;q=0.6","Cache-Control":"max-age=0","Connection":"keep-alive","Content-Type":"application/x-www-form-urlencoded","User-Agent":"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.124 Safari/537.36","Host":"sso.sysu.edu.cn","Origin":"https://sso.sysu.edu.cn","Refere":"https://sso.sysu.edu.cn/cas/login"}
+    conn=httplib.HTTPSConnection("sso.sysu.edu.cn")
+    conn.request("POST","/cas/login",params,headers)
+
+    res=conn.getresponse()
+    headers = res.getheaders()
+    data=res.read()
+
+
+    # output = open('conn1.txt','w')
+    # output.write(data)
+    # output.close()
+
+    # htmlCharset = "gb2312"
+    # decodehtml = data.decode(htmlCharset)
+
+
+    print res.status,res.reason
+    print headers
+    print data
+
+    if re.search(r'id="msg"\sclass="success"', data):
+        print "ok"
+        error = False
+        errorMs = "verify success!"
+    elif re.search(r'id="msg"\sclass="errors"', data):
+        print "errors"
+        error = True
+        errorMs = "verify failed!"
+    else :
+        print "check"
+        error = True
+        errorMs = "could not verify! call cjs!"
+    conn.close()
+    return HttpResponse(json.dumps({"error":error, "errorMs":errorMs}),content_type="application/json")
+
+
+

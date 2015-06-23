@@ -17,5 +17,5 @@ urlpatterns = patterns('',
     url(r'^index/allMessage/$', views.allMessage,name='allMessage'),
     url(r'^index/myMessage/$',views.myMessage, name='myMessage'),
     url(r'^index/personalMs/$',views.personalMs, name='personalMs'),
-    
+    url(r'^index/verify/$', views.verify, name='verify')
 )
