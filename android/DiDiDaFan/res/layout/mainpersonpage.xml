@@ -21,14 +21,28 @@
             android:id="@+id/mainpersonnewsbtn"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
+            android:layout_marginRight="2dp"
             android:layout_weight="1"
+            android:background="#FFC0CB"
             android:onClick="PersonNewsMainBtn"
-            android:text="xxx" />
+            android:text="xxx"
+            android:textSize="30dp" />
+
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#FFC0CB"
+            android:text="刷新"
+            android:textSize="25dp" />
+
     </LinearLayout>
+
     <ListView
         android:id="@+id/mainpersonLV"
         android:layout_width="match_parent"
-        android:layout_height="400dp" >
+        android:layout_height="350dp" >
+
     </ListView>
 
     <LinearLayout
