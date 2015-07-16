@@ -38,7 +38,7 @@ import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-
+//主页界面对应的代码实现，绑定mainpersonpage.xml文件
 public class MainPage extends Activity {
 		private Button javamainpersonnewsbtn;
 		private ListView ep;
@@ -167,7 +167,7 @@ public class MainPage extends Activity {
 	            	        			pklist.add(pkstr);
 	            	        			result = temp.getString("fields");
 	            	        			System.out.println("fields " + result);
-	            	        	
+										//找到内容，并绑定进行显示
 	            	        			JSONObject smalltemp;       			
 	            	        			try {
 	            							smalltemp = new JSONObject(result);					
