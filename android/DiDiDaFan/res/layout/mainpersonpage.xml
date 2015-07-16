@@ -34,6 +34,7 @@
             android:layout_height="wrap_content"
             android:background="#FFC0CB"
             android:text="刷新"
+            android:onClick="RefreshBtn"
             android:textSize="25dp" />
 
     </LinearLayout>
@@ -41,7 +42,7 @@
     <ListView
         android:id="@+id/mainpersonLV"
         android:layout_width="match_parent"
-        android:layout_height="350dp" >
+        android:layout_height="450dp" >
 
     </ListView>
 
