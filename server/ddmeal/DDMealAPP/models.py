@@ -1,6 +1,7 @@
 from django.db import models
 
 # Create your models here.
+# User of this adroid software
 class User(models.Model):
 	email    = models.CharField(max_length=60,blank = True,null = True)
 	realName = models.CharField(max_length=30)
@@ -17,6 +18,7 @@ class User(models.Model):
 	def toJSON(self):
 		import json
 		return json.dumps(dict([(attr, getattr(self, attr)) for attr in [f.name for f in self._meta.fields]]))
+# The cateen of the school
 class DiningRoom(models.Model):
 	name = models.CharField(max_length=30)
 	"""docstring for DiningRoom"""
@@ -25,7 +27,7 @@ class DiningRoom(models.Model):
 	def toJSON(self):
 		import json
 		return json.dumps(dict([(attr, getattr(self, attr)) for attr in [f.name for f in self._meta.fields]]))
-
+# Different windows in cateen service food for student
 class Window(models.Model):
 	name       = models.CharField(max_length=30)
 	diningRoom = models.ForeignKey(DiningRoom)
@@ -35,7 +37,7 @@ class Window(models.Model):
 	def toJSON(self):
 		import json
 		return json.dumps(dict([(attr, getattr(self, attr)) for attr in [f.name for f in self._meta.fields]]))
-
+# User can selecte Meal instead of input meal's name
 class Meal(models.Model):
 	name   = models.CharField(max_length=30)
 	price  = models.FloatField()
@@ -46,7 +48,7 @@ class Meal(models.Model):
 	def toJSON(self):
 		import json
 		return json.dumps(dict([(attr, getattr(self, attr)) for attr in [f.name for f in self._meta.fields]]))
-
+# Users can have serveral orders while a order belong to only one users
 class Order(models.Model):
 	postBy       = models.ForeignKey("User",related_name="postUser")
 	acceptBy     = models.ForeignKey("User",related_name="acceptUser",blank = True,null = True)
