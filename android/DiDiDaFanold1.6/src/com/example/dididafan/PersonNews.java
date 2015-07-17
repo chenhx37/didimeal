@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.http.message.BasicHeader;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -29,8 +30,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
+//个人信息
 public class PersonNews extends Activity {
+	//控件初始化
 	private EditText javaFName;
 	private EditText javaName;
 	private EditText javaAddress;
@@ -49,6 +51,7 @@ public class PersonNews extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_user_info);	
+		//绑定
 		javaFName = (EditText)findViewById(R.id.UserInfoFNameEt);
 		javaName = (EditText)findViewById(R.id.UserInfoNameEt);
 		javaAddress = (EditText)findViewById(R.id.UserInfoAddressEt);
@@ -60,6 +63,7 @@ public class PersonNews extends Activity {
 		getInfofromserver();   
 		
 	}
+	
 	/*先从网页得到个人数据，然后放出来，方便修改 */
 	Handler handler = new Handler(){
 		public void handleMessage(android.os.Message msg){
@@ -153,11 +157,15 @@ public class PersonNews extends Activity {
         e.printStackTrace();
 		}
 	}
+	
+	//跳转
 	public void UserInfoMainPageBtnClick(View v){	
 		Intent intent = new Intent();
 		intent.setClass(PersonNews.this, MainPage.class);
 		startActivity(intent);
 	}
+	
+	//从服务器得到信息
 	public void getInfofromserver(){
 		 Thread hth = new Thread(){
          	@Override
@@ -214,12 +222,14 @@ public class PersonNews extends Activity {
 		System.out.println("hello666 ");     
 
 	}
+	
 	//跳转到发布
 	public void UserInfoPublishBtnClick(View v){
 		Intent intent = new Intent();
 		intent.setClass(PersonNews.this, PublishActivity.class);
 		startActivity(intent);
 	}
+	
 	//跳转到消息
 	public void UserInfoNewsBtnClick(View v){
 		Intent intent = new Intent();

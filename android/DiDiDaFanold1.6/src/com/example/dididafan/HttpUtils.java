@@ -14,31 +14,35 @@ public class HttpUtils {
      * @param encode    编码格式
      * @return    将服务器端返回的数据转换成String
      */
+	 
     public static String sendPostMessage(String path, String encode)
     {
-        String result = "";
-        HttpClient httpClient = new DefaultHttpClient();
-        try
-        {
+         String result = "";
+         HttpClient httpClient = new DefaultHttpClient();
+		 
+         try
+         {
             HttpPost httpPost = new HttpPost(path);
             HttpResponse httpResponse = httpClient.execute(httpPost);
+			
             if(httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK)
             {
                 HttpEntity httpEntity = httpResponse.getEntity();
+				
                 if(httpEntity != null)
                 {
                     result = EntityUtils.toString(httpEntity, encode);
                 }
             }
-        }
-        catch (Exception e)
-        {
+         }
+         catch (Exception e)
+         {
             e.printStackTrace();
-        }
-        finally
-        {
+         }
+         finally
+         {
             httpClient.getConnectionManager().shutdown();
-        }
+         }
         
         return result;
     }

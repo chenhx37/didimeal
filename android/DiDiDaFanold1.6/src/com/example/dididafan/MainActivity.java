@@ -1,12 +1,12 @@
 package com.example.dididafan;
-
+//io包
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-
+//org.apache包
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -21,7 +21,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
-
+//app包
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -34,18 +34,21 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
+//首页，进行登录，代码操作 
 public class MainActivity extends Activity {
+	//绑定相关控件 
 	private Button javamainLoginBtn;
 	private EditText javamainLoginuser;
 	private EditText javamainLoginpsd;
 	private TextView javashowerrorTV;
+	//get 和 post的服务器网址
 	private String baseurl = "http://ddmeal.sinaapp.com/";
 	private String result = null;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		//绑定相关控件
 		javamainLoginBtn = (Button)findViewById(R.id.mainLoginBtn);
 		javamainLoginuser = (EditText)findViewById(R.id.mainLoginUser);
 		javamainLoginpsd = (EditText)findViewById(R.id.mainLoginPassword);
@@ -63,13 +66,14 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
-
+	//跳转到注册界面
 	public void SignUpMain(View v){
 		Intent intent = new Intent();
 		intent.setClass(MainActivity.this, SignUpActivity.class);		
 		startActivity(intent);
 		//MainActivity.this.finish();
 	}
+	//多线程 
 	Handler handler = new Handler(){
 		public void handleMessage(android.os.Message msg){
 			if(msg.what==1){
@@ -158,6 +162,7 @@ public class MainActivity extends Activity {
         }
 		//MainActivity.this.finish();
 	}
+	
 	private void showResponseResult(HttpResponse response)
     {
         if (null == response)

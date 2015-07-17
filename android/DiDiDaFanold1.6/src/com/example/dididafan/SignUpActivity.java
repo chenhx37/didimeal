@@ -31,7 +31,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
+//注册界面
 public class SignUpActivity extends Activity {
 	private EditText javasignuppageLoginPassword;
 	private EditText javasignuppageLoginUser;
@@ -43,11 +43,13 @@ public class SignUpActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.signuppage);
+		//绑定
 		javasignuppageLoginUser = (EditText)findViewById(R.id.signuppageLoginUser);
 		javasignuppageLoginPassword = (EditText)findViewById(R.id.signuppageLoginPassword);
 		javaSUPshowerrorTV = (TextView)findViewById(R.id.SUPshowerrorTV);
 		
 	}
+	
 	Handler handler = new Handler(){
 		public void handleMessage(android.os.Message msg){
 			if(msg.what==1){
@@ -55,6 +57,8 @@ public class SignUpActivity extends Activity {
 			}
 		};
 	};
+	
+	//点击事件 
 	public void SignUpnewPage(View v){		
 		try{			
             // 发送请求

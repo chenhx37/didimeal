@@ -1,11 +1,11 @@
 package com.example.dididafan;
-
+//包
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
-
+//新闻界面的代码事件 
 public class NewsActivity extends Activity {
 	private ListView OIWlv;
 	@Override
@@ -15,18 +15,21 @@ public class NewsActivity extends Activity {
 		//显示订单的listview
 		OIWlv = (ListView)findViewById(R.id.MessagePagelistView);
 	}
+	
 	//跳转到主页
 	public void MessagePageMPBtnClick(View v){
 		Intent intent = new Intent();
 		intent.setClass(NewsActivity.this, MainPage.class);
 		startActivity(intent);
 	}
+	
 	//跳转到发布
 	public void MessagePagePublishBtnClick(View v){
 		Intent intent = new Intent();
 		intent.setClass(NewsActivity.this, PublishActivity.class);
 		startActivity(intent);
 	}
+	
 	//跳转到消息
 	public void MessagePageNewsBtnClick(View v){
 		Intent intent = new Intent();

@@ -1,10 +1,10 @@
 package com.example.dididafan;
-
+//util
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+//http,json
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -20,7 +20,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
-
+//app
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -36,13 +36,15 @@ import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-
+//主页
 public class MainPage extends Activity {
+	//控件初始化
 		private Button javamainpersonnewsbtn;
 		private ListView ep;
 		private List<Map<String,Object>> mDataList = new ArrayList<Map<String,Object>>();
 		private long temp_id = -1;
 		private final int SELECT_A_CONTACT_DIALOG = 1;
+		//服务器地址
 		private String baseurl = "http://ddmeal.sinaapp.com/";
 		private String mNamestr;
 		@Override
@@ -154,12 +156,15 @@ public class MainPage extends Activity {
 			}
 			//MainPage.this.finish();
 		}
+		
+		//跳转
 		public void NewsMainBtn(View v){
 			Intent intent = new Intent();
 			intent.setClass(MainPage.this, NewsActivity.class);
 			startActivity(intent);
 			//MainPage.this.finish();
 		}
+		//跳转
 		public void PersonNewsMainBtn(View v){
 			Bundle mbundlenow = new Bundle();
 			mbundlenow.putString("name", javamainpersonnewsbtn.getText().toString());
@@ -169,6 +174,7 @@ public class MainPage extends Activity {
 			startActivity(intent);
 			//MainPage.this.finish();
 		}
+		
 		//get到订单信息放到list中，传递给listview
 		public void setData(){
 			Map<String,Object> mMap = new HashMap<String,Object>();

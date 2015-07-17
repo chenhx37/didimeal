@@ -106,16 +106,22 @@ public class PublishActivity extends Activity {
         }
 			
 	}
+	
+	//Ìø×ª
 	public void POMainPublishBtnClick(View v){
 		Intent intent = new Intent();
   		intent.setClass(PublishActivity.this, MainPage.class);
   		startActivity(intent);
 	}
+	
+	//Ìø×ª
 	public void PONewsPostBtnClick(View v){
 		Intent intent = new Intent();
   		intent.setClass(PublishActivity.this, PublishActivity.class);
   		startActivity(intent);
 	}
+	
+	//Ìø×ª
 	public void PONewsPulishBtnClick(View v){
 		Intent intent = new Intent();
   		intent.setClass(PublishActivity.this, NewsActivity.class);
