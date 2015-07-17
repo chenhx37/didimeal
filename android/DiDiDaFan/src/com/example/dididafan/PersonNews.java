@@ -21,6 +21,10 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.snappydb.DB;
+import com.snappydb.DBFactory;
+import com.snappydb.SnappydbException;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -45,6 +49,8 @@ public class PersonNews extends Activity {
 	private String addressjson;
 	private String nicknamejson;
 	private String[] result;
+	//private String mNamestr;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -56,10 +62,23 @@ public class PersonNews extends Activity {
 		//javaNetID = (EditText)findViewById(R.id.UserInfoNetIDEt);
 	//	Bundle mbundlenow = this.getIntent().getExtras();
 	//	nameNow = mbundlenow.getString("name");
-		nameNow = MainActivity.UserBigStr;
-		javaName.setText(nameNow);
-		getInfofromserver();   
 		
+		nameNow="";
+		try {
+			DB snappydb = DBFactory.open(getApplicationContext());
+			nameNow = snappydb.get("username");
+			snappydb.close();
+		} catch (SnappydbException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		//nameNow = MainActivity.UserBigStr;
+		javaName.setText(nameNow);
+		
+		
+		
+		getInfofromserver();   
 	}
 	/*先从网页得到个人数据，然后放出来，方便修改 */
 	Handler handler = new Handler(){
@@ -73,6 +92,12 @@ public class PersonNews extends Activity {
 			if(msg.what==3){
 				javaAddress.setText(addressjson);
 			}
+			if(msg.what==4){
+				Toast.makeText(getApplicationContext(), "update failed!",Toast.LENGTH_SHORT).show();
+			}
+			if(msg.what==5){
+				Toast.makeText(getApplicationContext(), "update succeeded!",Toast.LENGTH_SHORT).show();				
+			}
 		};
 	};
 
@@ -84,7 +109,7 @@ public class PersonNews extends Activity {
             	@Override
             	public void run(){
             		//先get到个人信息，再post上去
-            		System.out.println("hello111 ");
+            		//System.out.println("hello111 ");
             		       		
             		HttpResponse response;
             		try{
@@ -102,9 +127,9 @@ public class PersonNews extends Activity {
             			params.add(new BasicNameValuePair("address",addressstr));
             		//	params.add(new BasicNameValuePair("netID",netidstr));
 		
-            			HttpEntity requestHttpEntity = new UrlEncodedFormEntity(params);
+            			HttpEntity requestHttpEntity = new UrlEncodedFormEntity(params,"UTF-8");
             			HttpPost httpRequest = new HttpPost(url);
-            			System.out.println("hello222 ");
+            			//System.out.println("hello222 ");
             			//header
             			Header headers = new BasicHeader("Content-type","application/x-www-form-urlencoded");          
             			httpRequest.setHeader(headers);
@@ -112,13 +137,15 @@ public class PersonNews extends Activity {
             			httpRequest.setHeader(headers1);
             			Header headers2 = new  BasicHeader("cookie","username="+nameNow);
             			httpRequest.setHeader(headers2);
+            			Header headers3 = new BasicHeader("Content-Encoding","gzip");
+            			httpRequest.setHeader(headers3);
             			// 将请求体内容加入请求中
             			httpRequest.setEntity(requestHttpEntity);
             			// 需要客户端对象来发送请求
             			HttpClient httpClient = new DefaultHttpClient();
             			// 发送请求
             			response = httpClient.execute(httpRequest);
-            			System.out.println("hello333 ");
+            			//System.out.println("hello333 ");
             			HttpEntity httpEntity = response.getEntity();
             			String nowstr = null;
             	     //   if(response.getStatusLine().getStatusCode() == 200)   {
@@ -128,15 +155,23 @@ public class PersonNews extends Activity {
             	        	try {
             	        		jsonObject = new JSONObject(nowstr);
             	        		String outstr = jsonObject.getString("error");
-            	        		//result = jsonObject.getString("errorMs");	
-            	        		System.out.println("hello555 "+outstr);
+            	        		if(outstr == "false"){
+            	        			//succeed
+            	        			handler.obtainMessage(5).sendToTarget();
+            	        		}
+            	        		else{
+            	        			//fail
+            	        			handler.obtainMessage(4).sendToTarget();
+            	        		}
             	        	} catch (JSONException e1) {
             	        		// TODO Auto-generated catch block
             	        		e1.printStackTrace();
+            	        		handler.obtainMessage(4).sendToTarget();
             	        	}           
 						//}							
             	    }catch (Exception e){
 						e.printStackTrace();
+						handler.obtainMessage(4).sendToTarget();
 					}
             		
 				}
@@ -145,6 +180,7 @@ public class PersonNews extends Activity {
 			System.out.println("hello666 ");     
 		}catch(Exception e){
         e.printStackTrace();
+        handler.obtainMessage(4).sendToTarget();
 		}
 	}
 	//跳转到主页
@@ -154,6 +190,23 @@ public class PersonNews extends Activity {
 		startActivity(intent);
 	}
 	
+	public void logout(View v){
+		try {
+			DB snappydb = DBFactory.open(getApplicationContext());
+			snappydb.destroy();
+			snappydb.close();
+		} catch (SnappydbException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		Intent intent = new Intent();
+		intent.setClass(PersonNews.this, MainActivity.class);
+		startActivity(intent);
+		PersonNews.this.finish();
+	}
+	
+	//个人信息
 	public void getInfofromserver(){
 		 Thread hth = new Thread(){
          	@Override
@@ -171,24 +224,24 @@ public class PersonNews extends Activity {
          		System.out.println(nameNow);
          		httpRequest.setHeader(headers2);
          		
-         		System.out.println("hello222 ");
+         		//System.out.println("hello222 ");
          		//发送请求
          		try{
-         			System.out.println("hello333 ");
+         			//System.out.println("hello333 ");
          			HttpResponse response = httpClient.execute(httpRequest);
          			
-         			System.out.println("hello444 ");
+         			//System.out.println("hello444 ");
          			// 显示响应
          			String nowstr = null;
          			nowstr = EntityUtils.toString(response.getEntity());   //获取字符串
          			//get到才跳转
-         			System.out.println("hellohere "+ nowstr);   
+         			//System.out.println("hellohere "+ nowstr);   
          			
          			JSONObject jsonObject;
          			jsonObject = new JSONObject(nowstr);
          			String myselfjson = jsonObject.getString("myself");
 	        		//result = jsonObject.getString("errorMs");	
-	        		System.out.println("hello555 "+myselfjson);
+	        		//System.out.println("hello555 "+myselfjson);
 	        		JSONObject jsonObjectin = new JSONObject(myselfjson);
 	        		phonejson = jsonObjectin.getString("phone");
 	        		realnamejson = jsonObjectin.getString("realName");
@@ -210,6 +263,8 @@ public class PersonNews extends Activity {
 		System.out.println("hello666 ");     
 
 	}
+	
+	
 	public void checkInfoBtnClick(View v){
 		Intent intent = new Intent();
 		intent.setClass(PersonNews.this, ConfirmActivity.class);

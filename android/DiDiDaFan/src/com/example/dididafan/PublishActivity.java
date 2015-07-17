@@ -24,10 +24,15 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.snappydb.DB;
+import com.snappydb.DBFactory;
+import com.snappydb.SnappydbException;
+
 import android.app.Activity;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -57,7 +62,23 @@ public class PublishActivity extends Activity {
     private ArrayAdapter<String> adapter;
     private Button timePickerBtn;
     private TimePickerDialog tpd;
+    private String mNamestr;
+    
     Date mydate=new Date(); 
+    
+	Handler handler = new Handler(){
+		public void handleMessage(android.os.Message msg){
+			
+			if(msg.what==4){
+				Toast.makeText(getApplicationContext(), "发布失败",Toast.LENGTH_SHORT).show();
+			}
+			if(msg.what==5){
+				Toast.makeText(getApplicationContext(), "发布成功",Toast.LENGTH_SHORT).show();
+			}
+		};
+	};
+    
+    
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -123,6 +144,16 @@ public class PublishActivity extends Activity {
 			}
         	
         });
+        
+        //read username
+        try {
+			DB snappydb = DBFactory.open(getApplicationContext());
+			mNamestr = snappydb.get("username");
+			snappydb.close();
+		} catch (SnappydbException e) {
+			// TODO Auto-generated catch blockf
+			e.printStackTrace();
+		}
 			
 	}
 	//跳转到主页
@@ -177,7 +208,7 @@ public class PublishActivity extends Activity {
             			params.add(new BasicNameValuePair("mealPrice",pricestr));
             			params.add(new BasicNameValuePair("diningRoom",addressmeal));
             			params.add(new BasicNameValuePair("endTime",year+"-"+month+"-"+day+" "+hour1+":"+minute1+":"+minus));		
-            			HttpEntity requestHttpEntity = new UrlEncodedFormEntity(params);
+            			HttpEntity requestHttpEntity = new UrlEncodedFormEntity(params,"UTF-8");
             			HttpPost httpRequest = new HttpPost(url);
             			System.out.println("hello222 ");
             			//header
@@ -185,8 +216,10 @@ public class PublishActivity extends Activity {
             			httpRequest.setHeader(headers);
             			Header headers1 = new BasicHeader("Accept","text/plain");
             			httpRequest.setHeader(headers1);
-            			Header headers2 = new  BasicHeader("cookie","username="+MainActivity.UserBigStr);
+            			Header headers2 = new  BasicHeader("Cookie","username="+mNamestr);
             			httpRequest.setHeader(headers2);
+            			Header headers3 = new BasicHeader("Content-Encoding","gzip");
+            			httpRequest.setHeader(headers3);
             			// 将请求体内容加入请求中
             			httpRequest.setEntity(requestHttpEntity);
             			// 需要客户端对象来发送请求
@@ -203,15 +236,23 @@ public class PublishActivity extends Activity {
             	        	try {
             	        		jsonObject = new JSONObject(nowstr);
             	        		String outstr = jsonObject.getString("error");
-            	        		//result = jsonObject.getString("errorMs");	
-            	        		System.out.println("发布成功 "+outstr);
+            	        		if(outstr == "false"){
+            	        			//succeed
+            	        			handler.obtainMessage(5).sendToTarget();
+            	        		}
+            	        		else{
+            	        			handler.obtainMessage(4).sendToTarget();
+            	        		}
+            	        		
             	        	} catch (JSONException e1) {
             	        		// TODO Auto-generated catch block
             	        		e1.printStackTrace();
+            	        		handler.obtainMessage(4).sendToTarget();
             	        	}           
 						//}							
             	    }catch (Exception e){
 						e.printStackTrace();
+						handler.obtainMessage(4).sendToTarget();
 					}
             		
 				}

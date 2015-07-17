@@ -50,6 +50,11 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		
+		
+		
+		
 		setContentView(R.layout.activity_main);
 		javamainLoginBtn = (Button)findViewById(R.id.mainLoginBtn);
 		javamainLoginuser = (EditText)findViewById(R.id.mainLoginUser);
@@ -61,14 +66,54 @@ public class MainActivity extends Activity {
 		javamainLoginuser.setText(mname);
 		javamainLoginpsd.setText(mpsd);*/
 		UserBigStr = javamainLoginuser.getText().toString();
+		//TrySnappy();
+
+		
 	}
 
+	@Override
+	public void onStart(){
+		super.onStart();
+		try {
+			DB snappydb = DBFactory.open(getApplicationContext());
+			
+			
+			//System.out.println("username="+un);
+			if(snappydb.exists("username")){
+				snappydb.close();
+           		Bundle mbundle = new Bundle();
+           		String namestr = javamainLoginuser.getText().toString();
+           		mbundle.putString("name", namestr);
+           		Intent intent = new Intent();
+	        
+           		intent.setClass(MainActivity.this, MainPage.class);
+           		intent.putExtras(mbundle);
+           		startActivity(intent);
+           		MainActivity.this.finish();
+			}
+			else{
+				snappydb = DBFactory.open(getApplicationContext());
+				snappydb.put("lasttime_all","1.0");
+				snappydb.put("flag_all","0");
+				snappydb.put("lasttime_msg","1.0");
+				snappydb.put("flag_msg","0");
+				
+				
+				//System.out.println("hello "+snappydb.get("lasttime_all"));
+				snappydb.close();				
+			}
+		} catch (SnappydbException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+	}
+	
+	
 	public void TrySnappy(){
 		try {
-			DB snappydb = DBFactory.open(this.getBaseContext());
-			snappydb.put("username", "chenhx");
-			System.out.println(snappydb.get("username"));
-			System.out.println("hi");
+			DB snappydb = DBFactory.open(getApplicationContext());
+			snappydb.del("username");
+			snappydb.close();
 			
 		} catch (SnappydbException e) {
 			// TODO Auto-generated catch block
@@ -92,13 +137,25 @@ public class MainActivity extends Activity {
 	Handler handler = new Handler(){
 		public void handleMessage(android.os.Message msg){
 			if(msg.what==1){
-				javashowerrorTV.setText(result);
+				//javashowerrorTV.setText(result);
+				Toast.makeText(getApplicationContext(), result,Toast.LENGTH_SHORT).show();
+			}
+			if(msg.what==7){
+				//set username in snappydb;
+				try {
+					DB snappydb = DBFactory.open(getApplicationContext());
+					snappydb.put("username",javamainLoginuser.getText().toString());
+					snappydb.close();
+				} catch (SnappydbException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 			}
 		};
 	};
 	/* 登陆按钮的click事件 */
 	public void SignInMain(View v){			
-		//System.out.println("hello111 ");
 		try{			
             // 发送请求
             Thread hth = new Thread(){
@@ -111,13 +168,11 @@ public class MainActivity extends Activity {
             			String supuserstr = javamainLoginuser.getText().toString();
             			String suppsdstr =  javamainLoginpsd.getText().toString();
             			UserBigStr = supuserstr;
-            			//System.out.println("hello222 ");
             			String url = baseurl+"ddmeal/login/";
             			List <NameValuePair> params = new ArrayList <NameValuePair>();   //Post运作传送变量必须用NameValuePair[]数组储存 
             			params.add(new BasicNameValuePair("username",supuserstr));
             			params.add(new BasicNameValuePair("password",suppsdstr));
             			HttpEntity requestHttpEntity = new UrlEncodedFormEntity(params);
-            			//System.out.println("hello333 ");
             			HttpPost httpRequest = new HttpPost(url);	
             		//	List<Header> headers;
             			//headers.add(new BasicHeader("Content-type","application/x-www-form-urlencoded"));
@@ -133,19 +188,17 @@ public class MainActivity extends Activity {
                         
                         //返回数据，取得响应
             			response = httpClient.execute(httpRequest);
-            			System.out.println("hello444 ");
             			String nowstr = null;
             	        if(response.getStatusLine().getStatusCode() == 200)   {
-           	            nowstr = EntityUtils.toString(response.getEntity());   //获取字符串
-           	            System.out.println("hello "+ nowstr);   
+           	            nowstr = EntityUtils.toString(response.getEntity());   //获取字符串   
            	            JSONObject jsonObject;
            	            try {
            	            	jsonObject = new JSONObject(nowstr);
            	            	String outstr = jsonObject.getString("error");
-           	            	//System.out.println("hello555 "+outstr);
            	            	
            	            	result = jsonObject.getString("errorMs");      	            	          	            	
            	            	if(outstr=="false"){           	            		
+           	            		handler.obtainMessage(7).sendToTarget();
            	            		Bundle mbundle = new Bundle();
            	            		String namestr = javamainLoginuser.getText().toString();
            	            		mbundle.putString("name", namestr);
@@ -156,6 +209,9 @@ public class MainActivity extends Activity {
            	            		startActivity(intent);
            	            		MainActivity.this.finish();
            	            	}
+           	            	if(outstr=="true"){
+                    			handler.obtainMessage(1,result).sendToTarget();
+                    		}
            	            	
            	            } catch (JSONException e1) {
 						// TODO Auto-generated catch block
@@ -167,11 +223,11 @@ public class MainActivity extends Activity {
             		}catch(IOException ec){
             			response = null;
             		}
-            		handler.obtainMessage(1,result).sendToTarget();
+            		
+            		
             	}
             };
             hth.start();
-            System.out.println("hello666 ");
 		}catch(Exception e)
         {
             e.printStackTrace();

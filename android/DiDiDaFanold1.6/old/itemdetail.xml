@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:background="#F5F5F5">
+
+     <TextView
+         android:id="@+id/messageContent"
+         android:layout_width="176dp"
+         android:layout_height="60dp"
+         android:layout_weight="0.80"
+         android:gravity="center"
+         android:text="xxx接了你的单"
+         android:textSize="20dp" />
+
+     <Button
+         android:id="@+id/viewMoreBtn"
+         android:layout_width="wrap_content"
+         android:layout_height="60dp"
+         android:background="#FFC0CB"
+         android:text="查看详情>" 
+         android:textSize="20dp"
+         android:layout_alignParentRight="true"/>
+     
+
+</LinearLayout>

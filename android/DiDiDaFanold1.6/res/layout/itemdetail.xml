@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@drawable/back"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+     <TextView
+         android:layout_width="match_parent"
+         android:layout_height="124dp"
+         android:gravity="center"
+         android:text="xxx" />
+
+     <TextView
+         android:layout_width="303dp"
+         android:layout_height="146dp"
+         android:gravity="center"
+         android:text="接了你的订单" />
+
+</LinearLayout>
