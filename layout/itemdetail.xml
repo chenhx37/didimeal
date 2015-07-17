@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-
+	<!-- inform one of lastest news about him -->
      <TextView
          android:id="@+id/showitemNA"
          android:layout_width="match_parent"

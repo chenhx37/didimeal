@@ -1,4 +1,6 @@
 <!-- layout for user information page -->
+<!-- one need to confirm his identity from here -->
+<!-- one can update his personal information here -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -179,6 +181,7 @@
         android:layout_marginTop="22dp" >
 
 		<!-- "验证"button click to jump to the confirmation page -->
+		<!-- this is related to sysu account -->
         <Button
             android:id="@+id/UserInfoCheckBtn"
             android:layout_width="55dp"

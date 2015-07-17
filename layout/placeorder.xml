@@ -1,3 +1,5 @@
+<!-- layout for place order page -->
+<!-- one create a new order ,fill it's information,then post it -->
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -189,7 +191,7 @@
             android:text="时间"
             android:textColor="#000000"
             android:textSize="18dp" />
-
+		<!-- click and then pop out a time picker -->
         <Button
             android:id="@+id/selectTime"
             android:layout_width="wrap_content"
@@ -210,7 +212,7 @@
         android:layout_marginLeft="36dp"
         android:layout_marginTop="36dp"
         android:orientation="horizontal" >
-
+		<!-- click to post an order -->
        <Button
            android:id="@+id/placeorderSure"
            android:layout_width="wrap_content"
@@ -221,7 +223,7 @@
            android:onClick="PublishAcSureBtnClick"
            android:text="确定"
            android:textSize="20dp" />
-
+		<!-- click to cancel an order -->
         <Button
             android:id="@+id/placeorderCancel"
             android:layout_width="wrap_content"
