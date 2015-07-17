@@ -1,3 +1,7 @@
+<!-- layout for user information page -->
+<!-- record account information,phone,address,nickname,etc-->
+<!-- one need to confirm his identity from here -->
+<!-- one can update his personal information here -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -177,6 +181,8 @@
         android:layout_below="@+id/linearLayout6"
         android:layout_marginTop="22dp" >
 
+		<!-- "验证"button click to jump to the confirmation page -->
+		<!-- this is related to sysu account -->
         <Button
             android:id="@+id/UserInfoCheckBtn"
             android:layout_width="55dp"
@@ -189,7 +195,9 @@
             android:text="NetID验证"
             android:textColor="#000000"
             android:textSize="20dp" />
-
+            
+		<!-- "更新button" click to update one's information -->
+		<!--post info to web server and display on the app-->
         <Button
             android:id="@+id/UserInfoUpdateBtn"
             android:layout_width="55dp"

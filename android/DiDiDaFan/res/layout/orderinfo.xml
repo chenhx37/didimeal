@@ -1,9 +1,11 @@
+<!-- layout of an order information-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@drawable/back"
     android:orientation="vertical" >
-
+	<!--display detailed information of the order-->
+	<!-- place, time,price,reward,etc.-->
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

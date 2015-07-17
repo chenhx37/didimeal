@@ -1,3 +1,5 @@
+<!-- layout for first page-->
+<!-- one offer a name and password to create an account -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -16,7 +18,8 @@
         android:orientation="horizontal"
         android:paddingLeft="12dp"
         android:paddingRight="12dp" >
-
+		
+		<!-- click to create a new account -->
         <Button
             android:id="@+id/mainSignUpBtn"
             android:layout_width="match_parent"
@@ -28,7 +31,7 @@
             android:onClick="SignUpMain"
             android:text="快速注册"
             android:textSize="28dp" />
-
+		<!-- click to log in an existed account -->
         <Button
             android:id="@+id/mainLoginBtn"
             android:layout_width="match_parent"

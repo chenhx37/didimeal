@@ -1,9 +1,11 @@
+<!-- layout for item of messages -->
 <?xml version="1.0" encoding="utf-8"?><LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="@drawable/back"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-
+	<!-- inform one of lastest news about him -->
+	<!-- order he receives and others who receive his order-->
      <TextView
          android:id="@+id/showitemNA"
          android:layout_width="match_parent"

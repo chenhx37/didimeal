@@ -1,3 +1,5 @@
+<!-- layout for main page -->
+<!-- list of the latest order information -->
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -16,7 +18,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:src="@drawable/ic_launcher" />
-
+		<!--click and jump to the user info page-->
         <Button
             android:id="@+id/mainpersonnewsbtn"
             android:layout_width="wrap_content"
@@ -37,7 +39,7 @@
         android:layout_alignParentBottom="true"
         android:background="#FFC0CB"
         android:paddingBottom="0dp" >
-
+		<!-- three imagebutton for three main part of function-->
         <ImageButton
             android:id="@+id/mainpersonbtn"
             android:layout_width="wrap_content"
